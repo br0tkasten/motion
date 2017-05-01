@@ -1,0 +1,19 @@
+#!/bin/sh
+
+BROKER=broker.example.com
+BASETOPIC=camera
+USERNAME=mqtt-user
+PASSWORD=mqtt-passwordsten.de
+
+CAMERA=$1
+IMAGE=$2
+
+[ "x$CAMERA" == "x" ] && echo "Usage: $0 <CAMERA> <IMAGE>" && exit 1 
+[ "x$IMAGE" == "x" ] && "Usage: $0 <CAMERA> <IMAGE>" && exit 2 
+
+/usr/bin/mosquitto_pub \
+        -h "$BROKER" \
+        -u "$USERNAME" \
+        -P "$PASSWORD" \
+        -t "$BASETOPIC/$CAMERA" \
+        -f "$IMAGE" \
