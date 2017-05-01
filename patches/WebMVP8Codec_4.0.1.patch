@@ -1,0 +1,46 @@
+--- a/ffmpeg.c
++++ b/ffmpeg.c
+@@ -60,6 +60,7 @@
+ #define MY_CODEC_ID_MPEG2VIDEO AV_CODEC_ID_MPEG2VIDEO
+ #define MY_CODEC_ID_H264      AV_CODEC_ID_H264
+ #define MY_CODEC_ID_HEVC      AV_CODEC_ID_HEVC
++#define MY_CODEC_ID_VP8       AV_CODEC_ID_VP8 
+ 
+ #else
+ 
+@@ -70,6 +71,7 @@
+ #define MY_CODEC_ID_MPEG2VIDEO CODEC_ID_MPEG2VIDEO
+ #define MY_CODEC_ID_H264      CODEC_ID_H264
+ #define MY_CODEC_ID_HEVC      CODEC_ID_H264
++#define MY_CODEC_ID_VP8       CODEC_ID_VP8 
+ 
+ #endif
+ /*********************************************/
+@@ -303,10 +305,14 @@
+       ext = ".mkv";
+       of = av_guess_format ("matroska", NULL, NULL);
+       of->video_codec = MY_CODEC_ID_H264;
+-    } else if (strcmp (codec, "hevc") == 0){
+-      ext = ".mp4";
+-      of = av_guess_format ("mp4", NULL, NULL);
++    } else if (strcmp (codec, "hevc") == 0){        
++      ext = ".mp4";                                 
++      of = av_guess_format ("mp4", NULL, NULL);     
+       of->video_codec = MY_CODEC_ID_HEVC;
++    } else if (strcmp (codec, "webm") == 0){
++      ext = ".webm";
++      of = av_guess_format ("webm", NULL, NULL);
++      of->video_codec = MY_CODEC_ID_VP8;
+     } else {
+         MOTION_LOG(ERR, TYPE_ENCODER, NO_ERRNO, "%s: ffmpeg_video_codec option value"
+                    " %s is not supported", codec);
+@@ -319,8 +325,7 @@
+     }
+ 
+     /* The 4 allows for ".avi" or ".mpg" to be appended. */
+-    strncat(filename, ext, 4);
+-
++     strncat(filename, ext, 5);
+     return of;
+ }
+ /**
